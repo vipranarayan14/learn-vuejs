@@ -6,5 +6,6 @@ const app = new Vue({
     product: "Socks",
     description: "A pair of warm, fuzzy socks.",
     image: "./assests/vmSocks-green-onWhite.jpg",
+    inventory: 8,
   },
 });
