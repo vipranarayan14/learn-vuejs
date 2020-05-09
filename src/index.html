@@ -8,9 +8,17 @@
   </head>
   <body>
     <div id="app">
+      <div class="product">
+        <div class="product-image">
+          <a :href="image">
+            <img v-bind:src="image" :alt="description" />
+          </a>
+        </div>
 
+        <div class="product-info">
           <h1>{{product}}</h1>
           <p>{{description}}I ❤️ {{product.toLowerCase()}}.</p>
+        </div>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
