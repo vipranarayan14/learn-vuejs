@@ -21,5 +21,18 @@ const app = new Vue({
         absoluteUnit: "1cm",
       },
     ],
+    cart: 0,
+  },
+  methods: {
+    addToCart: function() {
+      let cart = this.cart + 1;
+
+      this.cart = cart > this.inventory ? this.inventory : cart;
+    },
+    removeFromCart: function() {
+      let cart = this.cart - 1;
+
+      this.cart = cart <= 0 ? 0 : cart;
+    },
   },
 });

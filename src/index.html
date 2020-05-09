@@ -28,6 +28,12 @@
             <li>{{size.relativeUnit}} ({{size.absoluteUnit}})</li>
           </ul>
         </div>
+
+        <div class="cart">
+          <button v-on:click="addToCart">+</button>
+          <span>{{cart}}</span>
+          <button @click="removeFromCart">-</button>
+        </div>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
