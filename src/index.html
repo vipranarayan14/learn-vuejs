@@ -17,10 +17,16 @@
 
         <div class="product-info">
           <h1>{{product}}</h1>
+
           <p>{{description}}I ❤️ {{product.toLowerCase()}}.</p>
+
           <p v-if="inventory > 10">In stock</p>
           <p v-else-if="inventory > 0">Almost sold out!</p>
           <p v-else>Out of stock</p>
+
+          <ul v-for="(size, index) in sizes" :key="index">
+            <li>{{size.relativeUnit}} ({{size.absoluteUnit}})</li>
+          </ul>
         </div>
       </div>
     </div>
