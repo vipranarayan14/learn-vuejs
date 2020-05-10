@@ -11,11 +11,7 @@
       <div class="cart">
         Cart ({{cart}})
       </div>
-      <product
-        :premium-user="premiumUser"
-        @add-to-cart="updateCart(1)"
-        @remove-to-cart="updateCart(-1)"
-      />
+      <product :premium-user="premiumUser" :update-cart="updateCart" />
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="main.js"></script>

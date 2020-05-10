@@ -6,6 +6,10 @@ Vue.component("product", {
       type: Boolean,
       isRequired: true,
     },
+    updateCart: {
+      type: Function,
+      isRequired: true,
+    },
   },
   template: `
     <div class="product">
@@ -39,7 +43,7 @@ Vue.component("product", {
         ></div>
 
         <button
-          @click="addToCart"
+          @click="updateCart(1)"
           :disabled="inventory === 0"
           :class="{disabledButton: inventory === 0}"
         >
@@ -47,7 +51,7 @@ Vue.component("product", {
         </button>
         
         <button
-          @click="removeFromCart"
+          @click="updateCart(-1)"
           :disabled="inventory === 0"
           :class="{disabledButton: inventory === 0}"
         >
@@ -93,12 +97,6 @@ Vue.component("product", {
     };
   },
   methods: {
-    addToCart() {
-      this.$emit("add-to-cart");
-    },
-    removeFromCart() {
-      this.$emit("remove-to-cart");
-    },
     showVariant(index) {
       this.selectedVariant = index;
     },
