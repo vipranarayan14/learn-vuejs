@@ -38,24 +38,21 @@ Vue.component("product", {
           @mouseover="showVariant(index)"
         ></div>
 
-        <div class="cart">
-          <p>Add to cart:</p>
-          <button
-            @click="addToCart"
-            :disabled="inventory === 0"
-            :class="{disabledButton: inventory === 0}"
-          >
-            +
-          </button>
-          <span>{{cart}}</span>
-          <button
-            @click="removeFromCart"
-            :disabled="inventory === 0"
-            :class="{disabledButton: inventory === 0}"
-          >
-            -
-          </button>
-        </div>
+        <button
+          @click="addToCart"
+          :disabled="inventory === 0"
+          :class="{disabledButton: inventory === 0}"
+        >
+          Add to cart
+        </button>
+        
+        <button
+          @click="removeFromCart"
+          :disabled="inventory === 0"
+          :class="{disabledButton: inventory === 0}"
+        >
+          Remove from cart
+        </button>
       </div>
     </div>
     `,
@@ -97,14 +94,10 @@ Vue.component("product", {
   },
   methods: {
     addToCart() {
-      let cart = this.cart + 1;
-
-      this.cart = cart > this.inventory ? this.inventory : cart;
+      this.$emit("add-to-cart");
     },
     removeFromCart() {
-      let cart = this.cart - 1;
-
-      this.cart = cart <= 0 ? 0 : cart;
+      this.$emit("remove-to-cart");
     },
     showVariant(index) {
       this.selectedVariant = index;
@@ -124,5 +117,13 @@ const app = new Vue({
   el: "#app",
   data: {
     premiumUser: true,
+    cart: 0,
+  },
+  methods: {
+    updateCart(quantity) {
+      const cart = this.cart + quantity;
+
+      this.cart = cart < 0 ? 0 : cart;
+    },
   },
 });
