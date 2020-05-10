@@ -21,6 +21,18 @@ const app = new Vue({
         absoluteUnit: "1cm",
       },
     ],
+    variants: [
+      {
+        id: 1,
+        color: "green",
+        image: "./assests/vmSocks-green-onWhite.jpg",
+      },
+      {
+        id: 2,
+        color: "blue",
+        image: "./assests/vmSocks-blue-onWhite.jpg",
+      },
+    ],
     cart: 0,
   },
   methods: {
@@ -33,6 +45,9 @@ const app = new Vue({
       let cart = this.cart - 1;
 
       this.cart = cart <= 0 ? 0 : cart;
+    },
+    showVariant: function(image) {
+      this.image = image;
     },
   },
 });

@@ -24,15 +24,24 @@
           <p v-else-if="inventory > 0">Almost sold out!</p>
           <p v-else>Out of stock</p>
 
-          <ul v-for="(size, index) in sizes" :key="index">
+          <ul v-for="size in sizes" :key="size.relativeUnit">
             <li>{{size.relativeUnit}} ({{size.absoluteUnit}})</li>
           </ul>
-        </div>
 
-        <div class="cart">
-          <button v-on:click="addToCart">+</button>
-          <span>{{cart}}</span>
-          <button @click="removeFromCart">-</button>
+          <div
+            v-for="variant in variants"
+            :key="variant.color"
+            class="color-box"
+            :style="{backgroundColor: variant.color}"
+            @mouseover="showVariant(variant.image)"
+          ></div>
+
+          <div class="cart">
+            <p>Add to cart:</p>
+            <button v-on:click="addToCart">+</button>
+            <span>{{cart}}</span>
+            <button @click="removeFromCart">-</button>
+          </div>
         </div>
       </div>
     </div>
