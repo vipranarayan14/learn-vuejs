@@ -1,6 +1,12 @@
 const { Vue } = window;
 
 Vue.component("product", {
+  props: {
+    premiumUser: {
+      type: Boolean,
+      isRequired: true,
+    },
+  },
   template: `
     <div class="product">
       <div class="product-image">
@@ -17,6 +23,8 @@ Vue.component("product", {
         <p v-if="inventory > 10">In stock</p>
         <p v-else-if="inventory > 0">Almost sold out!</p>
         <p v-else>Out of stock</p>
+
+        <p>Shipping: {{ premiumUser ? 'free' : '₹50' }}</p>
 
         <ul v-for="size in sizes" :key="size.relativeUnit">
           <li>{{size.relativeUnit}} ({{size.absoluteUnit}})</li>
@@ -112,6 +120,9 @@ Vue.component("product", {
   },
 });
 
-new Vue({
+const app = new Vue({
   el: "#app",
+  data: {
+    premiumUser: true,
+  },
 });
