@@ -57,7 +57,21 @@ Vue.component("product", {
         >
           Remove from cart
         </button>
-      </div>
+
+        </div>
+
+        <div>
+          <h1>Reviews</h1>
+          <p v-if="!reviews.length">There are no reviews yet.</p>
+          <ul>
+            <li v-for="review in reviews">
+              <p><b>{{ review.name }}</b></p>
+              <p>Ratings: {{ review.ratings }}</p>
+              <p>{{ review.review }}</p>
+            </li>
+          </ul>
+        </div>
+        <product-review @review-submitted="addReview"/>
     </div>
     `,
   data() {
@@ -93,12 +107,17 @@ Vue.component("product", {
           quantity: 0,
         },
       ],
-      cart: 0,
+      reviews: [],
     };
   },
   methods: {
     showVariant(index) {
       this.selectedVariant = index;
+    },
+    addReview(review) {
+      console.log(review);
+
+      this.reviews.push(review);
     },
   },
   computed: {
@@ -107,6 +126,99 @@ Vue.component("product", {
     },
     inventory() {
       return this.variants[this.selectedVariant].quantity;
+    },
+  },
+});
+
+Vue.component("product-review", {
+  template: `
+  <form class="review-form" @submit.prevent="onSubmit">
+    <p v-if="errors.length">
+      <b>Please correct the following error(s):</b>
+      <ul>
+        <li v-for="error in errors">{{ error }}</li>
+      </ul>
+    </p>
+
+    <p>
+      <label>
+        Name 
+        <input type="text" v-model="name">
+      </label>
+    </p>
+
+    <p>
+      <label>
+        Review 
+        <textarea v-model="review"></textarea>
+      </label>
+    </p>
+    
+    <p>
+      <label>
+        Ratings
+        <select v-model.number="ratings">
+          <option>5</option>
+          <option>4</option>
+          <option>3</option>
+          <option>2</option>
+          <option>1</option>
+        </select>
+      </label>
+    </p>
+
+    <p>
+    Would you recommend this product? 
+      <label>
+        <input type="radio" value="Yes" v-model="recommended">
+        Yes
+      </label>
+      <label>
+        <input type="radio" value="No" v-model="recommended">
+        No
+      </label>
+    </p>
+    
+    <p>
+      <input type="submit" value="Submit">
+    </p>
+  </form>
+  `,
+  data() {
+    return {
+      name: "",
+      review: "",
+      ratings: null,
+      recommended: "",
+      errors: [],
+    };
+  },
+  methods: {
+    onSubmit() {
+      // Send product review to parent
+      const { name, review, ratings, recommended } = this;
+      const productReview = {
+        name,
+        review,
+        ratings,
+        recommended,
+      };
+
+      this.errors = [];
+
+      if (!name || !review || !ratings || !recommended) {
+        if (!name) this.errors.push("Name required.");
+        if (!review) this.errors.push("Review required.");
+        if (!ratings) this.errors.push("Ratings required.");
+        return;
+      }
+
+      this.$emit("review-submitted", productReview);
+
+      //Reset form fields
+      this.name = "";
+      this.review = "";
+      this.ratings = 5;
     },
   },
 });
