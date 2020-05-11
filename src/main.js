@@ -1,5 +1,7 @@
 const { Vue } = window;
 
+const eventBus = new Vue();
+
 Vue.component("product", {
   props: {
     premiumUser: {
@@ -60,18 +62,7 @@ Vue.component("product", {
 
         </div>
 
-        <div>
-          <h1>Reviews</h1>
-          <p v-if="!reviews.length">There are no reviews yet.</p>
-          <ul>
-            <li v-for="review in reviews">
-              <p><b>{{ review.name }}</b></p>
-              <p>Ratings: {{ review.ratings }}</p>
-              <p>{{ review.review }}</p>
-            </li>
-          </ul>
-        </div>
-        <product-review @review-submitted="addReview"/>
+        <review-tabs :reviews="reviews"/>
     </div>
     `,
   data() {
@@ -114,11 +105,6 @@ Vue.component("product", {
     showVariant(index) {
       this.selectedVariant = index;
     },
-    addReview(review) {
-      console.log(review);
-
-      this.reviews.push(review);
-    },
   },
   computed: {
     image() {
@@ -127,6 +113,49 @@ Vue.component("product", {
     inventory() {
       return this.variants[this.selectedVariant].quantity;
     },
+  },
+  mounted() {
+    eventBus.$on("review-submitted", (review) => {
+      this.reviews.push(review);
+    });
+  },
+});
+
+Vue.component("review-tabs", {
+  props: {
+    reviews: {
+      type: Array,
+      isRequired: true,
+    },
+  },
+  template: `
+  <div>
+    <span
+      v-for="(tab, index) in tabs"
+      :class="{ activeTab: selectedTab === tab }"
+      @click="selectedTab = tab"
+      :key="index"
+    > {{ tab }} </span>
+
+    <div v-show="selectedTab === 'Reviews'">
+      <p v-if="!reviews.length">There are no reviews yet.</p>
+      <ul>
+        <li v-for="review in reviews">
+          <p><b>{{ review.name }}</b></p>
+          <p>Ratings: {{ review.ratings }}</p>
+          <p>{{ review.review }}</p>
+        </li>
+      </ul>
+    </div>
+
+    <product-review v-show="selectedTab === 'Make a Review'"/>
+  </div>
+  `,
+  data() {
+    return {
+      tabs: ["Reviews", "Make a Review"],
+      selectedTab: "Reviews",
+    };
   },
 });
 
@@ -213,7 +242,7 @@ Vue.component("product-review", {
         return;
       }
 
-      this.$emit("review-submitted", productReview);
+      eventBus.$emit("review-submitted", productReview);
 
       //Reset form fields
       this.name = "";
