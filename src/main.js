@@ -217,7 +217,7 @@ Vue.component("product-review", {
     return {
       name: "",
       review: "",
-      ratings: null,
+      ratings: 0,
       recommended: "",
       errors: [],
     };
@@ -235,7 +235,7 @@ Vue.component("product-review", {
 
       this.errors = [];
 
-      if (!name || !review || !ratings || !recommended) {
+      if (!name || !review || !ratings) {
         if (!name) this.errors.push("Name required.");
         if (!review) this.errors.push("Review required.");
         if (!ratings) this.errors.push("Ratings required.");
@@ -247,7 +247,8 @@ Vue.component("product-review", {
       //Reset form fields
       this.name = "";
       this.review = "";
-      this.ratings = 5;
+      this.ratings = 0;
+      this.recommended = "";
     },
   },
 });
